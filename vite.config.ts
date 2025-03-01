@@ -1,9 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-
 import dts from 'vite-plugin-dts';
 import { resolve } from 'path';
-
 import { readFileSync } from 'fs';
 
 // package.json에서 버전 정보 읽기
@@ -22,8 +20,12 @@ export default defineConfig({
         lib: {
             // 라이브러리 진입점 설정
             entry: resolve(__dirname, 'src/index.ts'),
-            // 출력 형식 지정 (ES modules)
+            // 라이브러리 이름 (UMD 형식에서 사용)
+            name: 'UikitReact',
+            // 출력 형식 지정 (ES modules, UMD)
             formats: ['es'],
+            // 출력 파일 이름 지정
+            fileName: (format) => `ui-kit-react.${format}.js`,
         },
         // Rollup 번들러 설정
         rollupOptions: {
@@ -39,10 +41,7 @@ export default defineConfig({
         },
         // 소스맵 생성 (디버깅에 유용)
         sourcemap: true,
-        // 번들 최소화 비활성화 (선택 사항)
-        minify: false,
     },
-
     // 환경 변수 정의 (빌드 시 코드에 삽입됨)
     define: {
         'process.env.VERSION': JSON.stringify(packageJson.version),
